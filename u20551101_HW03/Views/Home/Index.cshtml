@@ -1,0 +1,173 @@
+﻿@model u20551101_HW03.Models.Merged
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<style>
+
+    body {
+        
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23aca292' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    #myModal .navbar {
+        display: none;
+    }
+    
+    
+
+
+</style>
+
+<div class="container">
+    <div class="row">
+        <!-- Students Section -->
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header">Students</h5>
+                <div class="card-body">
+                    <button class="btn btn-secondary float-right create-link" data-url="@Url.Action("Create", "students")">Create New</button>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Birthdate</th>
+                                <th>Gender</th>
+                                <th>Class</th>
+                                <th>Point</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Students)
+                            {
+                                <tr>
+                                    <td>@item.name</td>
+                                    <td>@item.surname</td>
+                                    <td>@item.birthdate</td>
+                                    <td>@item.gender</td>
+                                    <td>@item.classname</td>
+                                    <td>@item.point</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer pagination-container">
+                    <!-- Pagination for Students -->
+                    <ul class="pagination">
+                        <li class="page-item @(ViewBag.StudentCurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { studentpage = ViewBag.StudentCurrentPage - 1, bookpage = ViewBag.BookCurrentPage })">Previous</a>
+                        </li>
+                        @for (int i = Math.Max(1, ViewBag.StudentCurrentPage - 2); i <= Math.Min(ViewBag.StudentTotalPages, ViewBag.StudentCurrentPage + 2); i++)
+                        {
+                            <li class="page-item @(i == ViewBag.StudentCurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { studentpage = i, bookpage = ViewBag.BookCurrentPage })">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(ViewBag.StudentCurrentPage == ViewBag.StudentTotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { studentpage = ViewBag.StudentCurrentPage + 1, bookpage = ViewBag.BookCurrentPage })">Next</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
+        </div>
+
+        <!-- Books Section -->
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header">Books</h5>
+                <div class="card-body">
+                    <button class="btn btn-secondary float-right" id="create" data-url="@Url.Action("Create", "books")">Create New</button>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Page Count</th>
+                                <th>Point</th>
+                                <th>Author</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Books)
+                            {
+                               
+                                <tr>
+                                    <td>@item.name</td>
+                                    <td>@item.pagecount</td>
+                                    <td>@item.point</td>
+                                    <td>@item.authors.name</td>
+                                    <td>@item.types.name</td>
+                                    <td>@item.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+
+
+                    <!-- Pagination for Books -->
+                    <div class="text-center">
+                        <ul class="pagination">
+                            <li class="page-item @(ViewBag.BookCurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { studentpage = ViewBag.StudentCurrentPage, bookpage = ViewBag.BookCurrentPage - 1 })">Previous</a>
+                            </li>
+                            @for (int i = Math.Max(1, ViewBag.BookCurrentPage - 2); i <= Math.Min(ViewBag.BookTotalPages, ViewBag.BookCurrentPage + 2); i++)
+                            {
+                                <li class="page-item @(i == ViewBag.BookCurrentPage ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", new { studentpage = ViewBag.StudentCurrentPage, bookpage = i })">@i</a>
+                                </li>
+                            }
+                            <li class="page-item @(ViewBag.BookCurrentPage == ViewBag.BookTotalPages ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { studentpage = ViewBag.StudentCurrentPage, bookpage = ViewBag.BookCurrentPage + 1 })">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="myModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        // Function to handle the "Create" button click
+        $(".create-link").click(function (e) {
+            e.preventDefault();
+            var url = $(this).data("url"); 
+
+            $.get(url, function (data) {
+                $("#modal-content").empty();
+                $("#modal-content").html(data);
+                $("#myModal").modal("show");
+            });
+        });
+    });
+
+</script>
+
