@@ -25,7 +25,7 @@ namespace u20551101_HW03.Models
         public string surname { get; set; }
         public Nullable<System.DateTime> birthdate { get; set; }
         public string gender { get; set; }
-        public string classname { get; set; }
+        public string @class { get; set; }
         public Nullable<int> point { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

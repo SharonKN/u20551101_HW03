@@ -67,9 +67,18 @@ namespace u20551101_HW03.Controllers
             int typeTotalCount = db.types.Count();
             int borrowTotalCount = db.borrows.Count();
 
-            var authors = db.authors.OrderBy(s => s.authorId).Skip(authorSkipCount).Take(pageSize).ToList();
-            var types = db.types.OrderBy(s => s.typeId).Skip(typeSkipCount).Take(pageSize).ToList();
-            var borrows = db.borrows.OrderBy(b => b.borrowId).Skip(borrowSkipCount).Take(pageSize).ToList();
+            var authors = db.authors.OrderBy(a => a.name).Skip(authorSkipCount).Take(pageSize).ToList();
+
+            var types = db.types.OrderBy(t => t.name).Skip(typeSkipCount).Take(pageSize).ToList();
+
+            var borrows = db.borrows
+    .Join(db.students, b => b.studentId, s => s.studentId, (b, student) => new { Borrow = b, StudentName = student.name })
+    .OrderBy(b => b.StudentName)
+    .Select(b => b.Borrow)
+    .Skip(borrowSkipCount)
+    .Take(pageSize)
+    .ToList();
+
 
 
             int authorTotalPages = (int)Math.Ceiling((double)authorTotalCount / pageSize);

@@ -44,7 +44,7 @@
           <Property Name="surname" Type="varchar" MaxLength="20" />
           <Property Name="birthdate" Type="date" />
           <Property Name="gender" Type="varchar" MaxLength="10" />
-          <Property Name="classname" Type="varchar" MaxLength="7" />
+          <Property Name="class" Type="varchar" MaxLength="7" />
           <Property Name="point" Type="int" />
         </EntityType>
         <EntityType Name="types">
@@ -175,7 +175,7 @@
           <Property Name="surname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="birthdate" Type="DateTime" Precision="0" />
           <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="classname" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Name="class" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
           <Property Name="point" Type="Int32" />
           <NavigationProperty Name="borrows" Relationship="Self.FK_borrows_students" FromRole="students" ToRole="borrows" />
         </EntityType>
@@ -305,7 +305,7 @@
                 <ScalarProperty Name="surname" ColumnName="surname" />
                 <ScalarProperty Name="birthdate" ColumnName="birthdate" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="classname" ColumnName="classname" />
+                <ScalarProperty Name="class" ColumnName="class" />
                 <ScalarProperty Name="point" ColumnName="point" />
               </MappingFragment>
             </EntityTypeMapping>

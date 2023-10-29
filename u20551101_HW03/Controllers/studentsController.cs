@@ -47,7 +47,7 @@ namespace u20551101_HW03.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "studentId,name,surname,birthdate,gender,classname,point")] students students)
+        public async Task<ActionResult> Create([Bind(Include = "studentId,name,surname,birthdate,gender,class,point")] students students)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace u20551101_HW03.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "studentId,name,surname,birthdate,gender,classname,point")] students students)
+        public async Task<ActionResult> Edit([Bind(Include = "studentId,name,surname,birthdate,gender,class,point")] students students)
         {
             if (ModelState.IsValid)
             {
