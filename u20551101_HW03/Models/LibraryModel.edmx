@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="authors">
+          <Key>
+            <PropertyRef Name="authorId" />
+          </Key>
+          <Property Name="authorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="surname" Type="varchar" MaxLength="70" />
+        </EntityType>
+        <EntityType Name="books">
+          <Key>
+            <PropertyRef Name="bookId" />
+          </Key>
+          <Property Name="bookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="90" />
+          <Property Name="pagecount" Type="int" />
+          <Property Name="point" Type="int" />
+          <Property Name="authorId" Type="int" />
+          <Property Name="typeId" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="borrows">
+          <Key>
+            <PropertyRef Name="borrowId" />
+          </Key>
+          <Property Name="borrowId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="studentId" Type="int" />
+          <Property Name="bookId" Type="int" />
+          <Property Name="takenDate" Type="datetime" />
+          <Property Name="broughtDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="studentId" />
+          </Key>
+          <Property Name="studentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+          <Property Name="surname" Type="varchar" MaxLength="20" />
+          <Property Name="birthdate" Type="date" />
+          <Property Name="gender" Type="varchar" MaxLength="10" />
+          <Property Name="classname" Type="varchar" MaxLength="7" />
+          <Property Name="point" Type="int" />
+        </EntityType>
+        <EntityType Name="types">
+          <Key>
+            <PropertyRef Name="typeId" />
+          </Key>
+          <Property Name="typeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="30" />
+        </EntityType>
+        <Association Name="FK_books_authors">
+          <End Role="authors" Type="Self.authors" Multiplicity="0..1" />
+          <End Role="books" Type="Self.books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="authors">
+              <PropertyRef Name="authorId" />
+            </Principal>
+            <Dependent Role="books">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_books_types">
+          <End Role="types" Type="Self.types" Multiplicity="0..1" />
+          <End Role="books" Type="Self.books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="types">
+              <PropertyRef Name="typeId" />
+            </Principal>
+            <Dependent Role="books">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrows_books">
+          <End Role="books" Type="Self.books" Multiplicity="0..1" />
+          <End Role="borrows" Type="Self.borrows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="books">
+              <PropertyRef Name="bookId" />
+            </Principal>
+            <Dependent Role="borrows">
+              <PropertyRef Name="bookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrows_students">
+          <End Role="students" Type="Self.students" Multiplicity="0..1" />
+          <End Role="borrows" Type="Self.borrows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="students">
+              <PropertyRef Name="studentId" />
+            </Principal>
+            <Dependent Role="borrows">
+              <PropertyRef Name="studentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryModelStoreContainer">
+          <EntitySet Name="authors" EntityType="Self.authors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="books" EntityType="Self.books" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="borrows" EntityType="Self.borrows" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="students" EntityType="Self.students" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="types" EntityType="Self.types" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_books_authors" Association="Self.FK_books_authors">
+            <End Role="authors" EntitySet="authors" />
+            <End Role="books" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_books_types" Association="Self.FK_books_types">
+            <End Role="types" EntitySet="types" />
+            <End Role="books" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrows_books" Association="Self.FK_borrows_books">
+            <End Role="books" EntitySet="books" />
+            <End Role="borrows" EntitySet="borrows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrows_students" Association="Self.FK_borrows_students">
+            <End Role="students" EntitySet="students" />
+            <End Role="borrows" EntitySet="borrows" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="authors">
+          <Key>
+            <PropertyRef Name="authorId" />
+          </Key>
+          <Property Name="authorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="surname" Type="String" MaxLength="70" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="books" Relationship="Self.FK_books_authors" FromRole="authors" ToRole="books" />
+        </EntityType>
+        <EntityType Name="books">
+          <Key>
+            <PropertyRef Name="bookId" />
+          </Key>
+          <Property Name="bookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="90" FixedLength="false" Unicode="false" />
+          <Property Name="pagecount" Type="Int32" />
+          <Property Name="point" Type="Int32" />
+          <Property Name="authorId" Type="Int32" />
+          <Property Name="typeId" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="authors" Relationship="Self.FK_books_authors" FromRole="books" ToRole="authors" />
+          <NavigationProperty Name="types" Relationship="Self.FK_books_types" FromRole="books" ToRole="types" />
+          <NavigationProperty Name="borrows" Relationship="Self.FK_borrows_books" FromRole="books" ToRole="borrows" />
+        </EntityType>
+        <EntityType Name="borrows">
+          <Key>
+            <PropertyRef Name="borrowId" />
+          </Key>
+          <Property Name="borrowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="studentId" Type="Int32" />
+          <Property Name="bookId" Type="Int32" />
+          <Property Name="takenDate" Type="DateTime" Precision="3" />
+          <Property Name="broughtDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="books" Relationship="Self.FK_borrows_books" FromRole="borrows" ToRole="books" />
+          <NavigationProperty Name="students" Relationship="Self.FK_borrows_students" FromRole="borrows" ToRole="students" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="studentId" />
+          </Key>
+          <Property Name="studentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="surname" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="birthdate" Type="DateTime" Precision="0" />
+          <Property Name="gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="classname" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Name="point" Type="Int32" />
+          <NavigationProperty Name="borrows" Relationship="Self.FK_borrows_students" FromRole="students" ToRole="borrows" />
+        </EntityType>
+        <EntityType Name="types">
+          <Key>
+            <PropertyRef Name="typeId" />
+          </Key>
+          <Property Name="typeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="books" Relationship="Self.FK_books_types" FromRole="types" ToRole="books" />
+        </EntityType>
+        <Association Name="FK_books_authors">
+          <End Role="authors" Type="Self.authors" Multiplicity="0..1" />
+          <End Role="books" Type="Self.books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="authors">
+              <PropertyRef Name="authorId" />
+            </Principal>
+            <Dependent Role="books">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_books_types">
+          <End Role="types" Type="Self.types" Multiplicity="0..1" />
+          <End Role="books" Type="Self.books" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="types">
+              <PropertyRef Name="typeId" />
+            </Principal>
+            <Dependent Role="books">
+              <PropertyRef Name="typeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrows_books">
+          <End Role="books" Type="Self.books" Multiplicity="0..1" />
+          <End Role="borrows" Type="Self.borrows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="books">
+              <PropertyRef Name="bookId" />
+            </Principal>
+            <Dependent Role="borrows">
+              <PropertyRef Name="bookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_borrows_students">
+          <End Role="students" Type="Self.students" Multiplicity="0..1" />
+          <End Role="borrows" Type="Self.borrows" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="students">
+              <PropertyRef Name="studentId" />
+            </Principal>
+            <Dependent Role="borrows">
+              <PropertyRef Name="studentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="authors" EntityType="Self.authors" />
+          <EntitySet Name="books" EntityType="Self.books" />
+          <EntitySet Name="borrows" EntityType="Self.borrows" />
+          <EntitySet Name="students" EntityType="Self.students" />
+          <EntitySet Name="types" EntityType="Self.types" />
+          <AssociationSet Name="FK_books_authors" Association="Self.FK_books_authors">
+            <End Role="authors" EntitySet="authors" />
+            <End Role="books" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_books_types" Association="Self.FK_books_types">
+            <End Role="types" EntitySet="types" />
+            <End Role="books" EntitySet="books" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrows_books" Association="Self.FK_borrows_books">
+            <End Role="books" EntitySet="books" />
+            <End Role="borrows" EntitySet="borrows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_borrows_students" Association="Self.FK_borrows_students">
+            <End Role="students" EntitySet="students" />
+            <End Role="borrows" EntitySet="borrows" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LibraryModelStoreContainer" CdmEntityContainer="LibraryEntities">
+          <EntitySetMapping Name="authors">
+            <EntityTypeMapping TypeName="LibraryModel.authors">
+              <MappingFragment StoreEntitySet="authors">
+                <ScalarProperty Name="authorId" ColumnName="authorId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="books">
+            <EntityTypeMapping TypeName="LibraryModel.books">
+              <MappingFragment StoreEntitySet="books">
+                <ScalarProperty Name="bookId" ColumnName="bookId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="pagecount" ColumnName="pagecount" />
+                <ScalarProperty Name="point" ColumnName="point" />
+                <ScalarProperty Name="authorId" ColumnName="authorId" />
+                <ScalarProperty Name="typeId" ColumnName="typeId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="borrows">
+            <EntityTypeMapping TypeName="LibraryModel.borrows">
+              <MappingFragment StoreEntitySet="borrows">
+                <ScalarProperty Name="borrowId" ColumnName="borrowId" />
+                <ScalarProperty Name="studentId" ColumnName="studentId" />
+                <ScalarProperty Name="bookId" ColumnName="bookId" />
+                <ScalarProperty Name="takenDate" ColumnName="takenDate" />
+                <ScalarProperty Name="broughtDate" ColumnName="broughtDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="students">
+            <EntityTypeMapping TypeName="LibraryModel.students">
+              <MappingFragment StoreEntitySet="students">
+                <ScalarProperty Name="studentId" ColumnName="studentId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="classname" ColumnName="classname" />
+                <ScalarProperty Name="point" ColumnName="point" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="types">
+            <EntityTypeMapping TypeName="LibraryModel.types">
+              <MappingFragment StoreEntitySet="types">
+                <ScalarProperty Name="typeId" ColumnName="typeId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

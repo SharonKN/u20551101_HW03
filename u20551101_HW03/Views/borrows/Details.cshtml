@@ -1,0 +1,50 @@
+﻿@model u20551101_HW03.Models.borrows
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>borrows</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.takenDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.takenDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.broughtDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.broughtDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.books.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.books.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.students.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.students.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.borrowId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

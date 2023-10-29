@@ -1,0 +1,343 @@
+﻿<!-- all library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="https://unpkg.com/jspdf@2.1.1/dist/jspdf.es.min.js"></script>
+<script src="https://unpkg.com/jspdf-autotable@3.5.13/dist/jspdf.plugin.autotable.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/h1o74rz3m42bfj62pl0rrsepli53ae08di697zuz4m4gy7yc/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script><!----------->
+
+<style>
+
+    
+
+    #myModal .navbar {
+        display: none;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-section">
+                <canvas id="popularBooksChart2015" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="chart-section">
+                <canvas id="popularBooksChart2016" width="400" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="chart-section">
+                <canvas id="popularBooksChart2017" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    <div>
+        <label for="fileFormat">Select File Format:</label>
+        <select id="fileFormat">
+            <option value="pdf">PDF</option>
+            <option value="image">Image</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="fileName">Enter File Name:</label>
+        <input type="text" id="fileName">
+    </div>
+
+    <div>
+        <button id="saveButton">Save as PDF/Image</button>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="documentArchive">
+                <h2>Document Archive</h2>
+                <table id="fileList" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>File Type</th>
+                            <th>Date and Time</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileList">
+                        <!-- This table will be populated dynamically with saved files -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        var labels = @Html.Raw(Json.Encode(ViewBag.ChartLabels));
+        var year2015Data = @Html.Raw(Json.Encode(ViewBag.Year2015Data));
+        var year2016Data = @Html.Raw(Json.Encode(ViewBag.Year2016Data));
+        var year2017Data = @Html.Raw(Json.Encode(ViewBag.Year2017Data));
+
+        var ctx2015 = document.getElementById('popularBooksChart2015').getContext('2d');
+        var ctx2016 = document.getElementById('popularBooksChart2016').getContext('2d');
+        var ctx2017 = document.getElementById('popularBooksChart2017').getContext('2d');
+
+        var chart2015 = new Chart(ctx2015, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '2015',
+                    data: year2015Data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Book Title'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Borrowed Times'
+                        }
+                    }
+                }
+            }
+        });
+
+        var chart2016 = new Chart(ctx2016, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '2016',
+                    data: year2016Data,
+                    backgroundColor: 'rgba(192, 75, 192, 0.2)',
+                    borderColor: 'rgba(192, 75, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Book Title'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Borrowed Times'
+                        }
+                    }
+                }
+            }
+        });
+
+        var chart2017 = new Chart(ctx2017, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '2017',
+                    data: year2017Data,
+                    backgroundColor: 'rgba(192, 192, 75, 0.2)',
+                    borderColor: 'rgba(192, 192, 75, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Book Title'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Borrowed Times'
+                        }
+                    }
+                }
+            }
+        });
+
+    //function to save a chart as a PDF using pdfmake
+            document.getElementById('saveButton').addEventListener('click', function () {
+            var fileFormat = document.getElementById('fileFormat').value;
+            var fileName = document.getElementById('fileName').value;
+
+            if (!fileName) {
+                alert('Please enter a file name.');
+                return;
+            }
+
+            function saveChartAsPDFWithPdfmake(canvas, fileName) {
+                const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+                const docDefinition = {
+                    content: [
+                        {
+                            image: dataUrl,
+                            width: 500, 
+                        },
+                    ],
+                };
+                pdfMake.createPdf(docDefinition).download(fileName);
+                addToDocumentArchive(fileName, 'pdf'); // Add to the document archive
+            }
+
+            // function to save a chart as an image
+            function saveChartAsImage(canvas, fileName) {
+                var link = document.createElement('a');
+                canvas.toBlob(function (blob) {
+                    var url = URL.createObjectURL(blob);
+                    link.href = url;
+                    link.download = fileName;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                });
+                addToDocumentArchive(fileName, fileFormat); 
+            }
+
+
+
+            // Save each chart based on the selected format
+            if (fileFormat === 'pdf') {
+                saveChartAsPDFWithPdfmake(document.getElementById('popularBooksChart2015'), fileName + '_chart2015.pdf');
+                saveChartAsPDFWithPdfmake(document.getElementById('popularBooksChart2016'), fileName + '_chart2016.pdf');
+                saveChartAsPDFWithPdfmake(document.getElementById('popularBooksChart2017'), fileName + '_chart2017.pdf');
+            } else if (fileFormat === 'image') {
+                saveChartAsImage(document.getElementById('popularBooksChart2015'), fileName + '_chart2015.png');
+                saveChartAsImage(document.getElementById('popularBooksChart2016'), fileName + '_chart2016.png');
+                saveChartAsImage(document.getElementById('popularBooksChart2017'), fileName + '_chart2017.png');
+            }
+        });
+
+    // Function to add a file to the document archive
+    function addToDocumentArchive(fileName, fileType) {
+        var fileList = document.getElementById('fileList').getElementsByTagName('tbody')[0];
+        var now = new Date();
+        var description = '<div class="rich-text-description"></div>';
+        var row = fileList.insertRow(0);
+        var fileTypeCell = row.insertCell(0);
+        var dateCell = row.insertCell(1);
+        var descriptionCell = row.insertCell(2);
+        var actionsCell = row.insertCell(3);
+
+        fileTypeCell.innerHTML = fileType;
+        dateCell.innerHTML = now.toLocaleString();
+        descriptionCell.innerHTML = description;
+        actionsCell.innerHTML = '<a href="#" class="downloadLink" data-file="' + fileName + '">Download</a> | <a href="#" class="deleteLink" data-file="' + fileName + '">Delete</a>';
+
+        
+        tinymce.init({
+            selector: '.rich-text-description',
+            height: 200,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                'bold italic | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+            content_style: 'body { font-family: Arial, sans-serif; font-size: 14px; }',
+        });
+    }
+
+
+
+    function deleteFile(row) {
+        var fileList = document.getElementById('fileList').getElementsByTagName('tbody')[0];
+        fileList.removeChild(row); 
+    }
+
+
+
+
+    function downloadFile(fileName) {
+
+        function saveChartAsPDFWithPdfmake(canvas, fileName) {
+            const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+            const docDefinition = {
+                content: [
+                    {
+                        image: dataUrl,
+                        width: 500, 
+                    },
+                ],
+            };
+            pdfMake.createPdf(docDefinition).download(fileName);
+
+        }
+        //function to save a chart as an image
+        function saveChartAsImage(canvas, fileName) {
+            var link = document.createElement('a');
+            canvas.toBlob(function (blob) {
+                var url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = fileName;
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+
+        }
+
+
+    
+        var fileFormat = fileName.endsWith('.pdf') ? 'pdf' : 'image';
+
+     
+        var canvas;
+        if (fileFormat === 'pdf') {
+            
+            canvas = document.getElementById('popularBooksChart2015');
+        } else if (fileFormat === 'image') {
+            
+            if (fileName.includes('_chart2015.png')) {
+                canvas = document.getElementById('popularBooksChart2015');
+            } else if (fileName.includes('_chart2016.png')) {
+                canvas = document.getElementById('popularBooksChart2016');
+            } else if (fileName.includes('_chart2017.png')) {
+                canvas = document.getElementById('popularBooksChart2017');
+            } else {
+                alert('Invalid file format');
+                return;
+            }
+        } else {
+            alert('Invalid file format');
+            return;
+        }
+
+        // Trigger the download based on the file format
+        if (fileFormat === 'pdf') {
+            
+            saveChartAsPDFWithPdfmake(canvas, fileName);
+        } else if (fileFormat === 'image') {
+           
+            saveChartAsImage(canvas, fileName);
+        }
+    }
+
+
+
+</script>
