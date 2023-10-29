@@ -262,6 +262,26 @@
                 'removeformat | help',
             content_style: 'body { font-family: Arial, sans-serif; font-size: 14px; }',
         });
+
+        // Attach event listeners for download and delete links
+        var downloadLinks = document.querySelectorAll('.downloadLink');
+        var deleteLinks = document.querySelectorAll('.deleteLink');
+
+        downloadLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var fileName = e.target.getAttribute('data-file');
+                downloadFile(fileName);
+            });
+        });
+
+        deleteLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                var row = e.target.closest('tr'); // Find the closest row element
+                deleteFile(row);
+            });
+        });
     }
 
 
